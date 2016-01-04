@@ -7,11 +7,20 @@ import java.util.List;
  */
 public interface ISongInfoSource
 {
-    List<SongInfo> RequestSongs();
+    /**
+     * Request all available song information.
+     * @return
+     */
+    List<SongInfo> requestSongs();
 
     /**
-     * Add a listener to be notified when data changes.
-     * @param Listener Listens for SongInfo to change.
+     * Add a listener for the completion of the SongInfo request.
+     * @param listener An object to be notified when there is a SongInfo update.
      */
-    void addSongInfoListener(ISongInfoListener Listener);
+    void addSongInfoListener(ISongInfoListener listener);
+    /**
+     * Remove listener for the completion of the SongInfo request.
+     * @param listener An object to no longer be notified when there is a SongInfo update.
+     */
+    void removeSongInfoListener(ISongInfoListener listener);
 }

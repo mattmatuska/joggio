@@ -21,24 +21,37 @@ import java.util.ArrayList;
  * A placeholder fragment containing a simple view.
  */
 public class SongListFragment extends Fragment implements ISongInfoListener {
-
+    /**
+     * Adapter for songs into song_textview displays.
+     */
     private ArrayAdapter<String> mSongListAdapter;
 
-    public SongListFragment()
-    {
+    /**
+     * Constructor.
+     */
+    public SongListFragment() {
     }
 
+    /**
+     * Creation of the fragment.
+     * @param savedInstanceState TODO learn what this is.
+     */
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
+    /**
+     * Initialization of the View for the SongFragment.
+     * @param inflater Inflates the XML document into an object.
+     * @param container TODO learn what this is.
+     * @param savedInstanceState TODO learn what this is.
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         // Inflate XML layout.
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -54,16 +67,24 @@ public class SongListFragment extends Fragment implements ISongInfoListener {
         return rootView;
     }
 
+    /**
+     * Initialization of the options menu.
+     * @param menu TODO learn what this is.
+     * @param inflater Inflates XML documents into the menu.
+     */
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.songfragment, menu);
     }
 
+    /**
+     * Response to the selection of an options menu item.
+     * @param item The item selected in the GUI.
+     * @return Whether a menu option has processed.
+     */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh)
         {
@@ -76,26 +97,29 @@ public class SongListFragment extends Fragment implements ISongInfoListener {
     }
 
     /**
-     * Get songs.  Not currently the most elegant.
+     * Get all song data.
      * @return A list of strings representing songs.
      */
     @NonNull
-    private ArrayList<String> RequestSongs()
-    {
+    private ArrayList<String> RequestSongs() {
         ArrayList<SongInfo> songs = new ArrayList<>();
 
         // Generate song title list. Hardcoding three songs to look up.  Later, look these up
         // from song library somewhere.
         ISongInfoSource songSource = new SongInfoSourceEchonest(getResources());
         songSource.addSongInfoListener(this);
-        songs.addAll(songSource.RequestSongs());
+        songs.addAll(songSource.requestSongs());
 
         return getSongsAsText(songs);
     }
 
+    /**
+     * Format SongInfo objects into text strings.
+     * @param songs Populated SongInfo objects.
+     * @return songs converted into strings.
+     */
     @NonNull
-    private ArrayList<String> getSongsAsText(ArrayList<SongInfo> songs)
-    {
+    private ArrayList<String> getSongsAsText(ArrayList<SongInfo> songs) {
         ArrayList<String> songTexts = new ArrayList<>();
         for(SongInfo song : songs)
         {
@@ -106,14 +130,13 @@ public class SongListFragment extends Fragment implements ISongInfoListener {
 
     /**
      * Declares song information has been updated.
-     * @param Songs The list of songs from the data source.
+     * @param songs The list of songs from the data source.
      */
     @Override
-    public void onSongInfoUpdated(ArrayList<SongInfo> Songs)
-    {
+    public void onSongInfoUpdated(ArrayList<SongInfo> songs) {
         // Doing it this way in order to verify that any data changing
         // inside the songs gets re-populated.
         mSongListAdapter.clear();
-        mSongListAdapter.addAll(getSongsAsText(Songs));
+        mSongListAdapter.addAll(getSongsAsText(songs));
     }
 }

@@ -12,10 +12,11 @@
 - Preserve data via restarts in some sort of data storage. SQLite? XML?
 - Write custom Adapter to make display more than a single text string.
 - Let user choose which song to select via Echonest.
+- Better handling data updates-- such as, function on SongInfo for "isComplete", so we don't have to update it.
 
 
-Big step:
-- Take songs from Google Play or Amazon Music playlists/libraries. (Multiple SongInfoSources.) May modify Echonest/other lookups.
+Long term:
+- Take songs from Google Play/Amazon Music/Spotify playlists/libraries. (Multiple SongInfoSources.) May modify Echonest/other lookups.
 - More Echonest data.
 - Echonest jEN API.
 

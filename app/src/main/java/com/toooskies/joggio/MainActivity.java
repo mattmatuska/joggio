@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+// Boilerplate code unmodified by toooskies.
 public class MainActivity extends AppCompatActivity {
 
     @Override
