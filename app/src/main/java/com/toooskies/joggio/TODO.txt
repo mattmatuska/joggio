@@ -1,0 +1,3 @@
+- Add user input?
+- Preserve data across restarts in some sort of data storage. SQLite? XML?
+- 
