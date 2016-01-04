@@ -1,0 +1,24 @@
+- Move Echonest JSON string literals into constants.
+- Unit tests.
+- Remove API constants from XML and into constants.  While it was good in theory, it's just too hard to use.
+- Cache updates to GUI.
+- Re-work the update-from-source-then-poll-updates SongInfoSource pattern.  Should just wait on download.
+- Examine Echonest API for more efficient updates.
+- Separate "lookup" objects from "internal data" objects.
+- Add user input?
+- Preserve data via restarts in some sort of data storage. SQLite? XML?
+- Write custom Adapter to make display more than a single text string.
+- Let user choose which song to select via Echonest.
+- Better handling data updates-- such as, function on SongInfo for "isComplete", so we don't have to update it.
+
+- Lesson 3 of android tutorial.
+
+Long term:
+- Take songs from Google Play/Amazon Music/Spotify playlists/libraries. (Multiple SongInfoSources.) May modify Echonest/other lookups.
+- More Echonest data.
+- Echonest jEN API.
+
+Way down the road:
+- Music playback.
+- Adjustable speed.
+- Work some C++ in there, just to show off.

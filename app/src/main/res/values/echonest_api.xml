@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="echonest_api_key">VPH8F4O6RUAALITII</string>
+    <string name="echonest_consumer_key">ebacc7f4f6d07cef1df3032e43ecd9dd </string>
+    <string name="echonest_shared_secret">auwnR7OiRUSKFzAQlDkwXw</string>
+    <string name="echonest_api_song_search_base_url">http://developer.echonest.com/api/v4/song/search?api_key=VPH8F4O6RUAALITII</string>
+    <string name="echonest_api_song_search_artist_param">artist</string>
+    <string name="echonest_api_song_search_title_param">title</string>
+    <string name="echonest_api_song_search_bucket_param">bucket</string>
+    <string name="echonest_api_song_search_bucket_value">audio_summary</string>
+</resources>
