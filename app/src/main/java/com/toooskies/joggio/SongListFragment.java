@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class SongListFragment extends Fragment implements ISongInfoListener {
 
-    ArrayAdapter<String> mSongListAdapter;
+    private ArrayAdapter<String> mSongListAdapter;
 
     public SongListFragment()
     {
@@ -43,7 +43,7 @@ public class SongListFragment extends Fragment implements ISongInfoListener {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Pass songs into array adapter for display.
-        mSongListAdapter = new ArrayAdapter<String>(
+        mSongListAdapter = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.song_textview,
                 R.id.song_textview,
@@ -82,7 +82,7 @@ public class SongListFragment extends Fragment implements ISongInfoListener {
     @NonNull
     private ArrayList<String> RequestSongs()
     {
-        ArrayList<SongInfo> songs = new ArrayList<SongInfo>();
+        ArrayList<SongInfo> songs = new ArrayList<>();
 
         // Generate song title list. Hardcoding three songs to look up.  Later, look these up
         // from song library somewhere.
@@ -96,7 +96,7 @@ public class SongListFragment extends Fragment implements ISongInfoListener {
     @NonNull
     private ArrayList<String> getSongsAsText(ArrayList<SongInfo> songs)
     {
-        ArrayList<String> songTexts = new ArrayList<String>();
+        ArrayList<String> songTexts = new ArrayList<>();
         for(SongInfo song : songs)
         {
             songTexts.add(song.toString());
@@ -106,11 +106,13 @@ public class SongListFragment extends Fragment implements ISongInfoListener {
 
     /**
      * Declares song information has been updated.
-     * @param Songs
+     * @param Songs The list of songs from the data source.
      */
     @Override
     public void onSongInfoUpdated(ArrayList<SongInfo> Songs)
     {
+        // Doing it this way in order to verify that any data changing
+        // inside the songs gets re-populated.
         mSongListAdapter.clear();
         mSongListAdapter.addAll(getSongsAsText(Songs));
     }

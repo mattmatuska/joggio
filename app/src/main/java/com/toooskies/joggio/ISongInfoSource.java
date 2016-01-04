@@ -9,8 +9,6 @@ public interface ISongInfoSource
 {
     List<SongInfo> RequestSongs();
 
-    void ParseRawData(SongInfo Info) throws Exception;
-
     /**
      * Add a listener to be notified when data changes.
      * @param Listener Listens for SongInfo to change.

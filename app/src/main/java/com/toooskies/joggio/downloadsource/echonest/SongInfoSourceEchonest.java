@@ -11,15 +11,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by toooskies on 12/30/2015.
  */
 public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListener
 {
-    Resources mResources;
-    ArrayList<SongInfo> mSongs;
+    private final Resources mResources;
+    private ArrayList<SongInfo> mSongs;
 
     /**
      * Constructor.
@@ -29,7 +28,7 @@ public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListene
     public SongInfoSourceEchonest(Resources resources)
     {
         mResources = resources;
-        mSongs = new ArrayList<SongInfo>();
+        mSongs = new ArrayList<>();
         mSongs.add(new SongInfo("Bon Jovi", "Wanted Dead or Alive"));
         mSongs.add(new SongInfo("Muse", "Stockholm Syndrome"));
         mSongs.add(new SongInfo("Mumford and Sons", "The Wolf"));
@@ -37,10 +36,10 @@ public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListene
 
     /**
      * Gets available song information.
-     * @return
+     * @return All available song information this source currently has.  It will also trigger an update.
      */
     @Override
-    public List<SongInfo> RequestSongs()
+    public ArrayList<SongInfo> RequestSongs()
     {
         for (SongInfo song : mSongs)
         {
@@ -54,7 +53,7 @@ public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListene
      * Recover information about a specific song and artist.
      * @param Info Our existing information for a song.
      */
-    public void GetSongInfo(SongInfo Info)
+    private void GetSongInfo(SongInfo Info)
     {
         EchonestDownloadTask downloadTask = new EchonestDownloadTask(mResources);
         downloadTask.addSongInfoListener(this);
@@ -63,9 +62,9 @@ public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListene
 
     /**
      * Parses the JSON content into the object.
-     * @param Song
+     * @param Song The internal data object containing song information (including parsed data).
      */
-    public void ParseRawData(SongInfo Song)
+    private void ParseRawData(SongInfo Song)
     throws Exception
     {
         if (Song.RawData instanceof EchonestSongData)
@@ -82,7 +81,7 @@ public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListene
                 Song.BPM = audio_summary.getDouble("tempo");
             }
 
-            // Reset the JSON field, we don't need it anymore.
+            // Clear the data field, we don't need it anymore.
             Song.RawData = null;
         }
     }
@@ -114,7 +113,7 @@ public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListene
     // ISongInfoSource implementation
 
     // Our collection of classes that are subscribed as listeners
-    protected ArrayList<ISongInfoListener> mListeners;
+    private ArrayList<ISongInfoListener> mListeners;
 
     // Method for listener classes to register themselves
     public void addSongInfoListener(ISongInfoListener listener)
@@ -130,7 +129,7 @@ public class SongInfoSourceEchonest implements ISongInfoSource, ISongInfoListene
     }
 
     // "fires" the event
-    protected void fireSongInfoUpdate(ArrayList<SongInfo> Songs)
+    private void fireSongInfoUpdate(ArrayList<SongInfo> Songs)
     {
         if (mListeners != null && !mListeners.isEmpty())
         {

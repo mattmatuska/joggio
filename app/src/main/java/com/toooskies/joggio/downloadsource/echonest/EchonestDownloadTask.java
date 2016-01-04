@@ -27,41 +27,44 @@ import static com.toooskies.joggio.R.string.log_tag_song_info_echonest;
 /**
  * Created by toooskies on 1/2/2016.
  */
-public class EchonestDownloadTask extends AsyncTask<SongInfo, Void, ArrayList<SongInfo>>
+class EchonestDownloadTask extends AsyncTask<SongInfo, Void, ArrayList<SongInfo>>
 {
 
-    private Resources mResources;
+    private final Resources mResources;
     /**
      * Constructor.  Needs resources to function. 
      * @param resources
      */
-    public EchonestDownloadTask(Resources resources)
-    {
+    public EchonestDownloadTask(Resources resources) {
         mResources = resources;
     }
     
    
     /**
      * Downloads the song information we need.
-     * @param params
-     * @return
+     * @param Songs The list of songs that we will attempt to update.  In the new file case,
+     *              these should be artist/title only.
+     * @return Songs, but in an ArrayList.  We will still want to display artist/title, but when
+     * data updates we will re-populate.
      */
     @Override
-    protected ArrayList<SongInfo> doInBackground(SongInfo... params)
-    {
-        ArrayList<SongInfo> songs = new ArrayList<SongInfo>(params.length);
+    protected ArrayList<SongInfo> doInBackground(SongInfo... Songs) {
+        ArrayList<SongInfo> songs = new ArrayList<>(Songs.length);
 
-        for (int i = 0; i < params.length; i++)
+        for (SongInfo param : Songs)
         {
-            DownloadSongData(params[i]);
-            songs.add(params[i]);
+            DownloadSongData(param);
+            songs.add(param);
         }
 
         return songs;
     }
 
-    private void DownloadSongData(SongInfo Song)
-    {
+    /**
+     * Queries the Echonest API to download more information about the song.
+     * @param Song Container for artist/title lookup information.
+     */
+    private void DownloadSongData(SongInfo Song) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -72,9 +75,7 @@ public class EchonestDownloadTask extends AsyncTask<SongInfo, Void, ArrayList<So
             String artist = GetURLSubstring(Song.Artist);
             String title = GetURLSubstring(Song.Title);
 
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are available at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+            // Construct the URL for the Echonest query
             Uri builtUri = Uri.parse(mResources.getString(echonest_api_song_search_base_url)).buildUpon()
                     .appendQueryParameter(mResources.getString(echonest_api_song_search_title_param), title)
                     .appendQueryParameter(mResources.getString(echonest_api_song_search_artist_param), artist)
@@ -92,23 +93,24 @@ public class EchonestDownloadTask extends AsyncTask<SongInfo, Void, ArrayList<So
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
+            if (inputStream != null)
+            {
+                reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
+                String line;
+                while ((line = reader.readLine()) != null)
+                {
+                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                    // But it does make debugging a *lot* easier if you print out the completed
+                    // buffer for debugging.
+                    buffer.append(line).append("\n");
+                }
 
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
+                if (buffer.length() != 0)
+                {
+                    AddRawData(Song, buffer.toString());
+                }
             }
-            AddRawData(Song, buffer.toString());
         } catch (IOException e) {
             Log.e(mResources.getString(log_tag_song_info_echonest), "Error ", e);
             // If the code didn't successfully get the song data, there's no point in attempting
@@ -160,7 +162,7 @@ public class EchonestDownloadTask extends AsyncTask<SongInfo, Void, ArrayList<So
     }
 
     // Our collection of classes that are subscribed as listeners
-    protected ArrayList<ISongInfoListener> mListeners;
+    private ArrayList<ISongInfoListener> mListeners;
 
     // Method for listener classes to register themselves
     public void addSongInfoListener(ISongInfoListener listener)
@@ -176,7 +178,7 @@ public class EchonestDownloadTask extends AsyncTask<SongInfo, Void, ArrayList<So
     }
 
     // "fires" the event
-    protected void fireSongInfoUpdate(ArrayList<SongInfo> Songs)
+    private void fireSongInfoUpdate(ArrayList<SongInfo> Songs)
     {
         if (mListeners != null && !mListeners.isEmpty())
         {
