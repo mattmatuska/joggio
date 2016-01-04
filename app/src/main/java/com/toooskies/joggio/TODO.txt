@@ -1,7 +1,4 @@
-- Casing.
-- Comments.
 - Move Echonest JSON string literals into constants.
-- Refactoring.
 - Unit tests.
 - Remove API constants from XML and into constants.  While it was good in theory, it's just too hard to use.
 - Cache updates to GUI.
@@ -14,6 +11,7 @@
 - Let user choose which song to select via Echonest.
 - Better handling data updates-- such as, function on SongInfo for "isComplete", so we don't have to update it.
 
+- Lesson 3 of android tutorial.
 
 Long term:
 - Take songs from Google Play/Amazon Music/Spotify playlists/libraries. (Multiple SongInfoSources.) May modify Echonest/other lookups.
